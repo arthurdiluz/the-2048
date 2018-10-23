@@ -1,30 +1,18 @@
-import pygame, sys, time
+import pygame
+import sys
 from pygame.locals import *
+from random import random
+from math import floor
 from colours import *
-from random import *
-
-TOTAL_POINTS = 0
-DEFAULT_SCORE = 2
-BOARD_SIZE = 4
-
-pygame.init()
-
-SURFACE = pygame.display.set_mode((400, 500), 0, 32)
-pygame.display.set_caption("2048")
-
-myfont = pygame.font.SysFont("monospace", 25)
-scorefont = pygame.font.SysFont("monospace", 50)
-
-tileMatrix = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
-undoMat = []
 
 
-def main(fromLoaded=False):
-    if not fromLoaded:
-        placeRandomTile()
-        placeRandomTile()
+def main(esta_carregado=False):
 
-    printMatrix()
+    if not esta_carregado:
+        posicionar_bloco()
+        posicionar_bloco()
+
+    exibir_matriz()
 
     while True:
         for event in pygame.event.get():
@@ -32,208 +20,171 @@ def main(fromLoaded=False):
                 pygame.quit()
                 sys.exit()
 
-            if checkIfCanGo() == True:
+            if checar_ir():
                 if event.type == KEYDOWN:
-                    if isArrow(event.key):
-                        rotations = getRotations(event.key)
+                    if setas(event.key):
+                        rotations = obter_rotacao(event.key)
 
-                        addToUndo()
+                        add_desfazer()
 
                         for i in range(0, rotations):
-                            rotateMatrixClockwise()
+                            rotacionar_matriz()
 
-                        if canMove():
-                            moveTiles()
-                            mergeTiles()
-                            placeRandomTile()
+                        if pode_mover():
+                            mover_bloco()
+                            mesclar_blocos()
+                            posicionar_bloco()
 
                         for j in range(0, (4 - rotations) % 4):
-                            rotateMatrixClockwise()
+                            rotacionar_matriz()
 
-                        printMatrix()
+                        exibir_matriz()
             else:
-                printGameOver()
+                exibir_gameover()
 
             if event.type == KEYDOWN:
-                global BOARD_SIZE
+                global placa_tamanho
 
                 if event.key == pygame.K_r:
-                    reset()
+                    reiniciar()
 
-                if 50 < event.key and 56 > event.key:
-                    BOARD_SIZE = event.key - 48
-                    reset()
+                if 50 < event.key < 56:
+                    placa_tamanho = event.key - 48
+                    reiniciar()
 
-                if event.key == pygame.K_s:
-                    saveGameState()
-                elif event.key == pygame.K_l:
-                    loadGameState()
                 elif event.key == pygame.K_u:
-                    undo()
+                    desfazer()
 
         pygame.display.update()
 
 
-def printMatrix():
-    SURFACE.fill(BLACK)
+def exibir_matriz():
+    superficie.fill(cor.preto)
 
-    global BOARD_SIZE
-    global TOTAL_POINTS
+    global placa_tamanho
+    global pontos_totais
+    
+    for i in range(placa_tamanho):
+        for j in range(placa_tamanho):
+            pygame.draw.rect(
+                superficie,
+                cor.obter_cor(bloco_matriz[i][j]),
+                (i * (400 / placa_tamanho), j * (400 / placa_tamanho) + 100, 400 / placa_tamanho, 400 / placa_tamanho)
+            )
 
-    for i in range(0, BOARD_SIZE):
-        for j in range(0, BOARD_SIZE):
-            pygame.draw.rect(SURFACE, getColour(tileMatrix[i][j]),
-                             (i * (400 / BOARD_SIZE), j * (400 / BOARD_SIZE) + 100, 400 / BOARD_SIZE, 400 / BOARD_SIZE))
+            label = fonte.render(str(bloco_matriz[i][j]), 1, (255, 255, 255))
+            label2 = placar_fonte.render("Score:" + str(pontos_totais), 1, (255, 255, 255))
 
-            label = myfont.render(str(tileMatrix[i][j]), 1, (255, 255, 255))
-            label2 = scorefont.render("Score:" + str(TOTAL_POINTS), 1, (255, 255, 255))
-
-            SURFACE.blit(label, (i * (400 / BOARD_SIZE) + 30, j * (400 / BOARD_SIZE) + 130))
-            SURFACE.blit(label2, (10, 20))
-
-
-def printGameOver():
-    global TOTAL_POINTS
-
-    SURFACE.fill(BLACK)
-
-    label = scorefont.render("Game Over!", 1, (255, 255, 255))
-    label2 = scorefont.render("Score:" + str(TOTAL_POINTS), 1, (255, 255, 255))
-    label3 = myfont.render("Press r to restart!", 1, (255, 255, 255))
-
-    SURFACE.blit(label, (50, 100))
-    SURFACE.blit(label2, (50, 200))
-    SURFACE.blit(label3, (50, 300))
+            superficie.blit(label, (i * (400 / placa_tamanho) + 30, j * (400 / placa_tamanho) + 130))
+            superficie.blit(label2, (10, 20))
 
 
-def placeRandomTile():
+def exibir_gameover():
+    global pontos_totais
+
+    superficie.fill(cor.preto)
+
+    label = placar_fonte.render("Game Over!", 1, (255, 255, 255))
+    label2 = placar_fonte.render("Score:" + str(pontos_totais), 1, (255, 255, 255))
+    label3 = fonte.render("Press r to restart!", 1, (255, 255, 255))
+
+    superficie.blit(label, (50, 100))
+    superficie.blit(label2, (50, 200))
+    superficie.blit(label3, (50, 300))
+
+
+def posicionar_bloco():
     count = 0
-    for i in range(0, BOARD_SIZE):
-        for j in range(0, BOARD_SIZE):
-            if tileMatrix[i][j] == 0:
+    for i in range(0, placa_tamanho):
+        for j in range(0, placa_tamanho):
+            if bloco_matriz[i][j] == 0:
                 count += 1
 
-    k = floor(random() * BOARD_SIZE * BOARD_SIZE)
+    k = floor(random() * placa_tamanho * placa_tamanho)
 
-    while tileMatrix[floor(k / BOARD_SIZE)][k % BOARD_SIZE] != 0:
-        k = floor(random() * BOARD_SIZE * BOARD_SIZE)
+    while bloco_matriz[floor(k / placa_tamanho)][k % placa_tamanho] != 0:
+        k = floor(random() * placa_tamanho * placa_tamanho)
 
-    tileMatrix[floor(k / BOARD_SIZE)][k % BOARD_SIZE] = 2
-
-
-def floor(n):
-    return int(n - (n % 1))
+    bloco_matriz[floor(k / placa_tamanho)][k % placa_tamanho] = 2
 
 
-def moveTiles():
-    # We want to work column by column shifting up each element in turn.
-    for i in range(0, BOARD_SIZE):  # Work through our 4 columns.
-        for j in range(0, BOARD_SIZE - 1):  # Now consider shifting up each element by checking top 3 elements if 0.
-            while tileMatrix[i][j] == 0 and sum(tileMatrix[i][
-                                                j:]) > 0:  # If any element is 0 and there is a number to shift we want to shift up elements below.
-                for k in range(j, BOARD_SIZE - 1):  # Move up elements below.
-                    tileMatrix[i][k] = tileMatrix[i][k + 1]  # Move up each element one.
-                tileMatrix[i][BOARD_SIZE - 1] = 0
+def mover_bloco():
+    for i in range(0, placa_tamanho):
+        for j in range(placa_tamanho - 1):
+            while bloco_matriz[i][j] == 0 and sum(bloco_matriz[i][j:]) > 0:
+                for k in range(j, placa_tamanho - 1):
+                    bloco_matriz[i][k] = bloco_matriz[i][k + 1]
+                bloco_matriz[i][placa_tamanho - 1] = 0
 
 
-def mergeTiles():
-    global TOTAL_POINTS
+def mesclar_blocos():
+    global pontos_totais
 
-    for i in range(0, BOARD_SIZE):
-        for k in range(0, BOARD_SIZE - 1):
-            if tileMatrix[i][k] == tileMatrix[i][k + 1] and tileMatrix[i][k] != 0:
-                tileMatrix[i][k] = tileMatrix[i][k] * 2
-                tileMatrix[i][k + 1] = 0
-                TOTAL_POINTS += tileMatrix[i][k]
-                moveTiles()
+    for i in range(placa_tamanho):
+        for k in range(placa_tamanho - 1):
+            if bloco_matriz[i][k] == bloco_matriz[i][k + 1] and bloco_matriz[i][k] != 0:
+                bloco_matriz[i][k] = bloco_matriz[i][k] * 2
+                bloco_matriz[i][k + 1] = 0
+                pontos_totais += bloco_matriz[i][k]
+                mover_bloco()
 
 
-def checkIfCanGo():
-    for i in range(0, BOARD_SIZE ** 2):
-        if tileMatrix[floor(i / BOARD_SIZE)][i % BOARD_SIZE] == 0:
+def checar_ir():
+    for i in range(0, placa_tamanho ** 2):
+        if bloco_matriz[floor(i / placa_tamanho)][i % placa_tamanho] == 0:
             return True
 
-    for i in range(0, BOARD_SIZE):
-        for j in range(0, BOARD_SIZE - 1):
-            if tileMatrix[i][j] == tileMatrix[i][j + 1]:
+    for i in range(0, placa_tamanho):
+        for j in range(0, placa_tamanho - 1):
+            if bloco_matriz[i][j] == bloco_matriz[i][j + 1]:
                 return True
-            elif tileMatrix[j][i] == tileMatrix[j + 1][i]:
+            elif bloco_matriz[j][i] == bloco_matriz[j + 1][i]:
                 return True
     return False
 
 
-def reset():
-    global TOTAL_POINTS
-    global tileMatrix
+def reiniciar():
+    global pontos_totais
+    global bloco_matriz
 
-    TOTAL_POINTS = 0
-    SURFACE.fill(BLACK)
+    pontos_totais = 0
+    superficie.fill(cor.preto)
 
-    tileMatrix = [[0 for i in range(0, BOARD_SIZE)] for j in range(0, BOARD_SIZE)]
+    bloco_matriz = [[0 for i in range(0, placa_tamanho)] for j in range(0, placa_tamanho)]
 
     main()
 
 
-def canMove():
-    for i in range(0, BOARD_SIZE):
-        for j in range(1, BOARD_SIZE):
-            if tileMatrix[i][j - 1] == 0 and tileMatrix[i][j] > 0:
+def pode_mover():
+    for i in range(0, placa_tamanho):
+        for j in range(1, placa_tamanho):
+            if bloco_matriz[i][j - 1] == 0 and bloco_matriz[i][j] > 0:
                 return True
-            elif (tileMatrix[i][j - 1] == tileMatrix[i][j]) and tileMatrix[i][j - 1] != 0:
+            elif (bloco_matriz[i][j - 1] == bloco_matriz[i][j]) and bloco_matriz[i][j - 1] != 0:
                 return True
 
     return False
 
 
-def saveGameState():
-    f = open("savedata", "w")
+def rotacionar_matriz():
+    for i in range(0, int(placa_tamanho / 2)):
+        for k in range(i, placa_tamanho - i - 1):
+            temp1 = bloco_matriz[i][k]
+            temp2 = bloco_matriz[placa_tamanho - 1 - k][i]
+            temp3 = bloco_matriz[placa_tamanho - 1 - i][placa_tamanho - 1 - k]
+            temp4 = bloco_matriz[k][placa_tamanho - 1 - i]
 
-    line1 = " ".join([str(tileMatrix[floor(x / BOARD_SIZE)][x % BOARD_SIZE]) for x in range(0, BOARD_SIZE ** 2)])
-
-    f.write(line1 + "\n")
-    f.write(str(BOARD_SIZE) + "\n")
-    f.write(str(TOTAL_POINTS))
-    f.close()
-
-
-def loadGameState():
-    global TOTAL_POINTS
-    global BOARD_SIZE
-    global tileMatrix
-
-    f = open("savedata", "r")
-
-    mat = (f.readline()).split(' ', BOARD_SIZE ** 2)
-    BOARD_SIZE = int(f.readline())
-    TOTAL_POINTS = int(f.readline())
-
-    for i in range(0, BOARD_SIZE ** 2):
-        tileMatrix[floor(i / BOARD_SIZE)][i % BOARD_SIZE] = int(mat[i])
-
-    f.close()
-
-    main(True)
+            bloco_matriz[placa_tamanho - 1 - k][i] = temp1
+            bloco_matriz[placa_tamanho - 1 - i][placa_tamanho - 1 - k] = temp2
+            bloco_matriz[k][placa_tamanho - 1 - i] = temp3
+            bloco_matriz[i][k] = temp4
 
 
-def rotateMatrixClockwise():
-    for i in range(0, int(BOARD_SIZE / 2)):
-        for k in range(i, BOARD_SIZE - i - 1):
-            temp1 = tileMatrix[i][k]
-            temp2 = tileMatrix[BOARD_SIZE - 1 - k][i]
-            temp3 = tileMatrix[BOARD_SIZE - 1 - i][BOARD_SIZE - 1 - k]
-            temp4 = tileMatrix[k][BOARD_SIZE - 1 - i]
-
-            tileMatrix[BOARD_SIZE - 1 - k][i] = temp1
-            tileMatrix[BOARD_SIZE - 1 - i][BOARD_SIZE - 1 - k] = temp2
-            tileMatrix[k][BOARD_SIZE - 1 - i] = temp3
-            tileMatrix[i][k] = temp4
+def setas(k):
+    return k == pygame.K_UP or k == pygame.K_DOWN or k == pygame.K_LEFT or k == pygame.K_RIGHT
 
 
-def isArrow(k):
-    return (k == pygame.K_UP or k == pygame.K_DOWN or k == pygame.K_LEFT or k == pygame.K_RIGHT)
-
-
-def getRotations(k):
+def obter_rotacao(k):
     if k == pygame.K_UP:
         return 0
     elif k == pygame.K_DOWN:
@@ -244,31 +195,50 @@ def getRotations(k):
         return 3
 
 
-def convertToLinearMatrix():
+def converter_matriz_linear():
     mat = []
 
-    for i in range(0, BOARD_SIZE ** 2):
-        mat.append(tileMatrix[floor(i / BOARD_SIZE)][i % BOARD_SIZE])
+    for i in range(0, placa_tamanho ** 2):
+        mat.append(bloco_matriz[floor(i / placa_tamanho)][i % placa_tamanho])  # ESTRUTURA DE DADOS
 
-    mat.append(TOTAL_POINTS)
+    mat.append(pontos_totais)  # ESTRUTURA DE DADOS
 
     return mat
 
 
-def addToUndo():
-    undoMat.append(convertToLinearMatrix())
+def add_desfazer():
+    desfazer_jogada.append(converter_matriz_linear())  # ESTRUTURA DE DADOS
 
 
-def undo():
-    if len(undoMat) > 0:
-        mat = undoMat.pop()
+def desfazer():
+    if len(desfazer_jogada) > 0:
+        mat = desfazer_jogada.pop()  # ESTRUTURA DE DADOS
 
-        for i in range(0, BOARD_SIZE ** 2):
-            tileMatrix[floor(i / BOARD_SIZE)][i % BOARD_SIZE] = mat[i]
+        for i in range(0, placa_tamanho ** 2):
+            bloco_matriz[floor(i / placa_tamanho)][i % placa_tamanho] = mat[i]
 
-        global TOTAL_POINTS
-        TOTAL_POINTS = mat[BOARD_SIZE ** 2]
+        global pontos_totais
+        pontos_totais = mat[placa_tamanho ** 2]
 
-        printMatrix()
+        exibir_matriz()
 
-main()
+
+if __name__ == '__main__':
+    pontos_totais = 0
+    placar_padrao = 2
+    placa_tamanho = 4
+
+    pygame.init()
+    cor = Cores()
+
+    superficie = pygame.display.set_mode((400, 500), 0, 32)
+    pygame.display.set_caption("O JOGO")
+    pygame.display.set_icon(pygame.image.load("icon.png"))
+
+    fonte = pygame.font.SysFont("monospace", 22)
+    placar_fonte = pygame.font.SysFont("monospace", 42)
+
+    bloco_matriz = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+    desfazer_jogada = []
+
+    main()

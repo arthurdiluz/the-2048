@@ -1,31 +1,31 @@
-BLACK = (0, 0, 0)
-RED = (244, 67, 54)
-PINK = (234, 30, 99)
-PURPLE = (156, 39, 176)
-DEEP_PURPLE = (103, 58, 183)
-BLUE = (33, 150, 243)
-TEAL = (0, 150, 136)
-L_GREEN = (139, 195, 74)
-GREEN = (60, 175, 80)
-ORANGE = (255, 152, 0)
-DEEP_ORANGE = (255, 87, 34)
-BROWN = (121, 85, 72)
+class Cores:
+    def __init__(self):
+        self.preto = (0, 0, 0)
+        self.vermelho = (244, 67, 54)
+        self.rosa = (234, 30, 99)
+        self.roxo = (156, 39, 176)
+        self.roxo_escuro = (103, 58, 183)
+        self.azul = (33, 150, 243)
+        self.verde_agua = (0, 150, 136)
+        self.verde_claro = (139, 195, 74)
+        self.verde = (60, 175, 80)
+        self.laranja = (255, 152, 0)
+        self.laranja_escuro = (255, 87, 34)
+        self.marrom = (121, 85, 72)
+        self.dicionario_cores = {
+            0: self.preto,
+            2: self.vermelho,
+            4: self.rosa,
+            8: self.roxo,
+            16: self.roxo_escuro,
+            32: self.azul,
+            64: self.verde_agua,
+            128: self.verde_claro,
+            256: self.verde,
+            512: self.laranja,
+            1024: self.laranja_escuro,
+            2048: self.marrom
+        }
 
-colour_dict = {
-    0: BLACK,
-    2: RED,
-    4: PINK,
-    8: PURPLE,
-    16: DEEP_PURPLE,
-    32: BLUE,
-    64: TEAL,
-    128: L_GREEN,
-    256: GREEN,
-    512: ORANGE,
-    1024: DEEP_ORANGE,
-    2048: BROWN
-}
-
-
-def getColour(i: int):
-    return colour_dict[i]
+    def obter_cor(self, i: int):
+        return self.dicionario_cores[i]
