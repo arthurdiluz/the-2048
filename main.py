@@ -15,19 +15,19 @@ def main(esta_carregado=False):
     exibir_matriz()
 
     while True:
-        for event in pygame.event.get():
-            if event.type == QUIT:
+        for evento in pygame.event.get():
+            if evento.type == QUIT:
                 pygame.quit()
                 sys.exit()
 
             if checar_ir():
-                if event.type == KEYDOWN:
-                    if setas(event.key):
-                        rotations = obter_rotacao(event.key)
+                if evento.type == KEYDOWN:
+                    if setas(evento.key):
+                        rotacoes = obter_rotacao(evento.key)
 
                         add_desfazer()
 
-                        for i in range(0, rotations):
+                        for i in range(0, rotacoes):
                             rotacionar_matriz()
 
                         if pode_mover():
@@ -35,24 +35,24 @@ def main(esta_carregado=False):
                             mesclar_blocos()
                             posicionar_bloco()
 
-                        for j in range(0, (4 - rotations) % 4):
+                        for j in range(0, (4 - rotacoes) % 4):
                             rotacionar_matriz()
 
                         exibir_matriz()
             else:
                 exibir_gameover()
 
-            if event.type == KEYDOWN:
+            if evento.type == KEYDOWN:
                 global placa_tamanho
 
-                if event.key == pygame.K_r:
+                if evento.key == pygame.K_r:
                     reiniciar()
 
-                if 50 < event.key < 56:
-                    placa_tamanho = event.key - 48
+                if 50 < evento.key < 56:
+                    placa_tamanho = evento.key - 48
                     reiniciar()
 
-                elif event.key == pygame.K_u:
+                elif evento.key == pygame.K_u:
                     desfazer()
 
         pygame.display.update()
@@ -72,33 +72,29 @@ def exibir_matriz():
                 (i * (400 / placa_tamanho), j * (400 / placa_tamanho) + 100, 400 / placa_tamanho, 400 / placa_tamanho)
             )
 
-            label = fonte.render(str(bloco_matriz[i][j]), 1, (255, 255, 255))
-            label2 = placar_fonte.render("Score:" + str(pontos_totais), 1, (255, 255, 255))
+            placar = fonte.render(str(bloco_matriz[i][j]), 1, (255, 255, 255))
+            pontuacao = placar_fonte.render("Score:" + str(pontos_totais), 1, (255, 255, 255))
 
-            superficie.blit(label, (i * (400 / placa_tamanho) + 30, j * (400 / placa_tamanho) + 130))
-            superficie.blit(label2, (10, 20))
+            superficie.blit(placar, (i * (400 / placa_tamanho) + 30, j * (400 / placa_tamanho) + 130))
+            superficie.blit(pontuacao, (10, 20))
 
 
 def exibir_gameover():
+
     global pontos_totais
 
     superficie.fill(cor.preto)
-
-    label = placar_fonte.render("Game Over!", 1, (255, 255, 255))
-    label2 = placar_fonte.render("Score:" + str(pontos_totais), 1, (255, 255, 255))
-    label3 = fonte.render("Press r to restart!", 1, (255, 255, 255))
-
-    superficie.blit(label, (50, 100))
-    superficie.blit(label2, (50, 200))
-    superficie.blit(label3, (50, 300))
+    superficie.blit(placar_fonte.render("Game Over!", 1, (255, 255, 255)), (50, 100))
+    superficie.blit(placar_fonte.render("Score:" + str(pontos_totais), 1, (255, 255, 255)), (50, 200))
+    superficie.blit(fonte.render("Press r to restart!", 1, (255, 255, 255)), (50, 300))
 
 
-def posicionar_bloco():
-    count = 0
+def posicionar_bloco(contador=0):
+
     for i in range(0, placa_tamanho):
         for j in range(0, placa_tamanho):
             if bloco_matriz[i][j] == 0:
-                count += 1
+                contador += 1
 
     k = floor(random() * placa_tamanho * placa_tamanho)
 
@@ -118,6 +114,7 @@ def mover_bloco():
 
 
 def mesclar_blocos():
+
     global pontos_totais
 
     for i in range(placa_tamanho):
@@ -130,6 +127,7 @@ def mesclar_blocos():
 
 
 def checar_ir():
+
     for i in range(0, placa_tamanho ** 2):
         if bloco_matriz[floor(i / placa_tamanho)][i % placa_tamanho] == 0:
             return True
@@ -144,6 +142,7 @@ def checar_ir():
 
 
 def reiniciar():
+
     global pontos_totais
     global bloco_matriz
 
@@ -156,6 +155,7 @@ def reiniciar():
 
 
 def pode_mover():
+
     for i in range(0, placa_tamanho):
         for j in range(1, placa_tamanho):
             if bloco_matriz[i][j - 1] == 0 and bloco_matriz[i][j] > 0:
@@ -167,6 +167,7 @@ def pode_mover():
 
 
 def rotacionar_matriz():
+
     for i in range(0, int(placa_tamanho / 2)):
         for k in range(i, placa_tamanho - i - 1):
             temp1 = bloco_matriz[i][k]
@@ -196,9 +197,10 @@ def obter_rotacao(k):
 
 
 def converter_matriz_linear():
+
     mat = []
 
-    for i in range(0, placa_tamanho ** 2):
+    for i in range(placa_tamanho ** 2):
         mat.append(bloco_matriz[floor(i / placa_tamanho)][i % placa_tamanho])  # ESTRUTURA DE DADOS
 
     mat.append(pontos_totais)  # ESTRUTURA DE DADOS
@@ -211,6 +213,7 @@ def add_desfazer():
 
 
 def desfazer():
+
     if len(desfazer_jogada) > 0:
         mat = desfazer_jogada.pop()  # ESTRUTURA DE DADOS
 
@@ -224,6 +227,7 @@ def desfazer():
 
 
 if __name__ == '__main__':
+
     pontos_totais = 0
     placar_padrao = 2
     placa_tamanho = 4
