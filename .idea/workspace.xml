@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f5dc5eaf-ea3f-4993-849a-db1e88b7cead" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/colours.py" beforeDir="false" afterPath="$PROJECT_DIR$/colours.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -11,7 +12,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/The_2048$main.coverage" NAME="main Coverage Results" MODIFIED="1540397899734" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/The_2048$main.coverage" NAME="main Coverage Results" MODIFIED="1540403371233" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="-288918807">
@@ -25,26 +26,26 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="png" value="1" />
-          <entry key="py" value="5" />
+          <entry key="py" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="Image" value="1" />
-          <entry key="Python" value="4" />
+          <entry key="Python" value="7" />
           <entry key="UML" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="dummy" value="518" />
-          <entry key="py" value="952" />
+          <entry key="py" value="1942" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="518" />
-          <entry key="Python" value="952" />
+          <entry key="Python" value="1942" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
@@ -56,8 +57,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+            <state relative-caret-position="195">
+              <caret line="43" column="26" selection-start-line="43" selection-start-column="26" selection-end-line="43" selection-end-column="26" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -66,10 +67,24 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tabuleiro.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="203">
+              <caret line="98" selection-start-line="98" selection-end-line="98" />
+              <folding>
+                <element signature="e#0#13#0" expanded="true" />
+                <marker date="1540403164602" expanded="true" signature="139:6197" ph="..." />
+                <marker date="1540403164602" expanded="true" signature="488:593" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/colours.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="465">
-              <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
+            <state relative-caret-position="30">
+              <caret line="2" column="19" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -85,15 +100,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>\d+:</find>
-      <find>:</find>
-      <find>\,\s\d</find>
-      <find>rand</find>
-      <find>DEFAULT_SCORE</find>
-      <find>pontuacao</find>
-      <find>TOTAL_POINTS</find>
-      <find>BOARD_SIZE</find>
-      <find>SURFACE</find>
       <find>is_carregado</find>
       <find>placeRandomTile</find>
       <find>getColour</find>
@@ -102,17 +108,60 @@
       <find>rotacionarMatriz</find>
       <find>pop</find>
       <find>append</find>
+      <find>(</find>
+      <find>):</find>
+      <find>cor</find>
+      <find>superficie</find>
+      <find>bloco_matriz</find>
+      <find>desfazer_jogada</find>
+      <find>pontos_totais</find>
+      <find>placar_padrao</find>
+      <find>placa_tamanho</find>
+      <find>range(0,</find>
+      <find>range(</find>
+      <find>global\s\w+\.\w+</find>
+      <find>fonte</find>
+      <find>placar_fonte</find>
+      <find>checar_ir</find>
+      <find>rotacionar_matriz</find>
+      <find>exibir_matriz</find>
+      <find>add_desfazer</find>
+      <find>exibir_gameover</find>
+      <find>global</find>
+      <find>(255, 255, 255</find>
+      <find>(255, 255, 255)</find>
     </findStrings>
     <replaceStrings>
-      <replace>\d+:</replace>
-      <replace>:</replace>
-      <replace>,\n</replace>
-      <replace>pontuacao_padrao</replace>
       <replace>pontos_totais</replace>
       <replace>placa_tamanho</replace>
       <replace>superficie</replace>
       <replace>cor.obter_cor</replace>
       <replace>rotacionar_matriz</replace>
+      <replace>(self</replace>
+      <replace>self):</replace>
+      <replace>self.cor</replace>
+      <replace>self.superficie</replace>
+      <replace>self.bloco_matriz</replace>
+      <replace>self.desfazer_jogada</replace>
+      <replace>self.pontos_totais</replace>
+      <replace>self.placa_tamanho</replace>
+      <replace>range(</replace>
+      <replace />
+      <replace>self.fonte</replace>
+      <replace>self.placar_fonte</replace>
+      <replace>tabuleiro.posicionar_bloco</replace>
+      <replace>tabuleiro.checar_ir</replace>
+      <replace>tabuleiro.setas</replace>
+      <replace>tabuleiro.obter_rotacao</replace>
+      <replace>tabuleiro.rotacionar_matriz</replace>
+      <replace>tabuleiro.exibir_matriz</replace>
+      <replace>tabuleiro.add_desfazer</replace>
+      <replace>tabuleiro.pode_mover</replace>
+      <replace>tabuleiro.mesclar_blocos</replace>
+      <replace>tabuleiro.mover_bloco</replace>
+      <replace>tabuleiro.exibir_gameover</replace>
+      <replace>self.cores.branco</replace>
+      <replace>self.cor.branco</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -126,6 +175,7 @@
         <option value="$PROJECT_DIR$/Matriz.py" />
         <option value="$PROJECT_DIR$/colours.py" />
         <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/tabuleiro.py" />
       </list>
     </option>
   </component>
@@ -227,7 +277,7 @@
     <frame x="52" y="30" width="1314" height="738" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20347004" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20031546" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -247,7 +297,7 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="right" id="SciView" order="3" />
-      <window_info anchor="right" id="R Graphics" order="4" />
+      <window_info anchor="right" id="R Graphics" order="4" weight="0.329653" />
       <window_info anchor="right" id="R Packages" order="5" />
       <window_info anchor="right" id="Database" order="6" />
     </layout>
@@ -289,15 +339,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/colours.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
+        <state relative-caret-position="30">
+          <caret line="2" column="19" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tabuleiro.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="98" selection-start-line="98" selection-end-line="98" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+            <marker date="1540403164602" expanded="true" signature="139:6197" ph="..." />
+            <marker date="1540403164602" expanded="true" signature="488:593" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+        <state relative-caret-position="195">
+          <caret line="43" column="26" selection-start-line="43" selection-start-column="26" selection-end-line="43" selection-end-column="26" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
