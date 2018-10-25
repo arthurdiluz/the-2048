@@ -1,18 +1,18 @@
 import pygame
-# import sys
-# from pygame.locals import *
+from pygame.locals import *
 from random import random
 from math import floor
-from colours import *
+from cores import *
 
 
 class Matriz:
-    def __init__(self):
-        self.superficie = pygame.display.set_mode((400, 500), 0, 32)
-        self.bloco_matriz = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
-        self.desfazer_jogada = []
-        self.fonte = pygame.font.SysFont("monospace", 22)
-        self.placar_fonte = pygame.font.SysFont("monospace", 42)
+    def __init__(self, superficie: pygame.display, bloco_matriz: list, desfazer_jogada: list,
+                 fonte: pygame.font, placar_fonte: pygame.font):
+        self.superficie = superficie
+        self.bloco_matriz = bloco_matriz
+        self.desfazer_jogada = desfazer_jogada
+        self.fonte = fonte
+        self.placar_fonte = placar_fonte
         self.tot_pontos = 0
         self.placar_padrao = 2
         self.placa_tam = 4
@@ -32,7 +32,7 @@ class Matriz:
                 )
 
                 placar = self.fonte.render(str(self.bloco_matriz[i][j]), 1, self.cor.branco)
-                pontuacao = self.placar_fonte.render("Score:" + str(self.tot_pontos), 1, self.cor.branco)
+                pontuacao = self.placar_fonte.render("Pontuação:" + str(self.tot_pontos), 1, self.cor.branco)
 
                 self.superficie.blit(placar, (i * (400 / self.placa_tam) + 30, j * (400 / self.placa_tam) + 130))
                 self.superficie.blit(pontuacao, (10, 20))
@@ -97,7 +97,6 @@ class Matriz:
 
         self.bloco_matriz = [[0 for i in range(self.placa_tam)] for j in range(self.placa_tam)]
 
-
     def pode_mover(self):
 
         for i in range(self.placa_tam):
@@ -123,6 +122,31 @@ class Matriz:
                 self.bloco_matriz[k][self.placa_tam - 1 - i] = temp3
                 self.bloco_matriz[i][k] = temp4
 
+    def converter_matriz_linear(self):
+
+        mat = []
+
+        for i in range(self.placa_tam ** 2):
+            mat.append(self.bloco_matriz[floor(i / self.placa_tam)][i % self.placa_tam])
+
+        mat.append(self.tot_pontos)
+
+        return mat
+
+    def add_desfazer(self):
+        self.desfazer_jogada.append(self.converter_matriz_linear())
+
+    def desfazer(self):
+
+        if len(self.desfazer_jogada) > 0:
+            mat = self.desfazer_jogada.pop()
+
+            for i in range(self.placa_tam ** 2):
+                self.bloco_matriz[floor(i / self.placa_tam)][i % self.placa_tam] = mat[i]
+
+            self.tot_pontos = mat[self.placa_tam ** 2]
+            self.exibir_matriz()
+
     def setas(self, tecla):
         return tecla == pygame.K_UP or tecla == pygame.K_DOWN or tecla == pygame.K_LEFT or tecla == pygame.K_RIGHT
 
@@ -135,29 +159,3 @@ class Matriz:
             return 1
         elif tecla == pygame.K_RIGHT:
             return 3
-
-    def converter_matriz_linear(self):
-
-        mat = []
-
-        for i in range(self.placa_tam ** 2):
-            mat.append(self.bloco_matriz[floor(i / self.placa_tam)][i % self.placa_tam])  # ESTRUTURA DE DADOS
-
-        mat.append(self.tot_pontos)  # ESTRUTURA DE DADOS
-
-        return mat
-
-    def add_desfazer(self):
-        self.desfazer_jogada.append(self.converter_matriz_linear())  # ESTRUTURA DE DADOS
-
-    def desfazer(self):
-
-        if len(self.desfazer_jogada) > 0:
-            mat = self.desfazer_jogada.pop()  # ESTRUTURA DE DADOS
-
-            for i in range(self.placa_tam ** 2):
-                self.bloco_matriz[floor(i / self.placa_tam)][i % self.placa_tam] = mat[i]
-
-            self.tot_pontos = mat[self.placa_tam ** 2]
-
-            self.exibir_matriz()
