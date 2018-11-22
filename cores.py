@@ -13,19 +13,20 @@ class Cores:
         self.laranja = (255, 152, 0)
         self.laranja_escuro = (255, 87, 34)
         self.marrom = (121, 85, 72)
+
         self.dicionario_cores = {
             0: self.preto,
-            2: self.vermelho,
-            4: self.rosa,
-            8: self.roxo,
-            16: self.roxo_escuro,
-            32: self.azul,
-            64: self.verde_agua,
-            128: self.verde_claro,
-            256: self.verde,
+            2: self.roxo,
+            4: self.roxo_escuro,
+            8: self.verde,
+            16: self.verde_agua,
+            32: self.verde_claro,
+            64: self.rosa,
+            128: self.azul,
+            256: self.laranja_escuro,
             512: self.laranja,
-            1024: self.laranja_escuro,
-            2048: self.marrom
+            1024: self.rosa,
+            2038: self.marrom
         }
 
     def obter_cor(self, i: int):

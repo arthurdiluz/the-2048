@@ -4,24 +4,22 @@ from tabuleiro import *
 
 
 def main(esta_carregado=False):
-
     if not esta_carregado:
         tabuleiro.posicionar_bloco()
         tabuleiro.posicionar_bloco()
-
     tabuleiro.exibir_matriz()
 
     while True:
-        for evento in pygame.event.get():
+        for evento in pygame.event.get():  # lista de eventos
             if evento.type == QUIT:
                 pygame.quit()
                 sys.exit()
 
+            #  KEYDOWN == TECLA
             if tabuleiro.checar_ir():
                 if evento.type == KEYDOWN:
                     if tabuleiro.setas(evento.key):
                         rotacoes = tabuleiro.obter_rotacao(evento.key)
-
                         tabuleiro.add_desfazer()
 
                         for i in range(rotacoes):
@@ -30,18 +28,17 @@ def main(esta_carregado=False):
                         if tabuleiro.pode_mover():
                             tabuleiro.mover_bloco()
                             tabuleiro.mesclar_blocos()
-                            tabuleiro.posicionar_bloco()
+                            tabuleiro.posicionar_bloco()  # novo bloco
 
                         for j in range((4 - rotacoes) % 4):
                             tabuleiro.rotacionar_matriz()
-
                         tabuleiro.exibir_matriz()
             else:
                 tabuleiro.exibir_gameover()
 
             if evento.type == KEYDOWN:
 
-                if evento.key == pygame.K_ESCAPE:
+                if evento.key == pygame.K_ESCAPE:  # ESC
                     pygame.quit()
                     sys.exit()
 
@@ -49,10 +46,7 @@ def main(esta_carregado=False):
                     tabuleiro.reiniciar()
                     main()
 
-                if 50 < evento.key < 56:
-                    tabuleiro.reiniciar()
-
-                elif evento.key == pygame.K_u:
+                if evento.key == pygame.K_u:
                     tabuleiro.desfazer()
 
         pygame.display.update()
