@@ -9,12 +9,14 @@ The objective of the game is to slide numbered tiles on a board to combine them 
 # How to run
 In the project directory, execute the following commands:
 - Install PyGame:
-	`pip install pygame`
+
+`pip install pygame`
 
 - Run script:
-	`cd src/`
 
-	`python main.py`
+`cd src/`
+
+`python main.py`
 
 # Samples of the screens
 
