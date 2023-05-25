@@ -48,7 +48,7 @@ def main(is_loaded=False):
         pygame.display.update()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     pygame.init()
     pygame.display.set_caption("The 2048")
     pygame.display.set_icon(pygame.image.load("img/icon.png"))
@@ -58,7 +58,7 @@ if __name__ == '__main__':
         [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
         [],
         pygame.font.SysFont("monospace", 22),
-        pygame.font.SysFont("monospace", 42)
+        pygame.font.SysFont("monospace", 42),
     )
 
     main()
